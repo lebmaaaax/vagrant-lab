@@ -23,22 +23,8 @@ Vagrant.configure("2") do |config|
     vb.cpus  = ENV.fetch("VM_CPUS", 2)
   end
 
-  # -----------------------------
-  # Synced folders
-  # -----------------------------
-  # По умолчанию:
-  # ./ (repo) -> /vagrant inside VM
-  # Можно добавить свои:
-  # config.vm.synced_folder "./app", "/opt/app"
-
-  # -----------------------------
-  # Provisioning
-  # -----------------------------
-
-  config.vm.provision "shell",
-    path: "provision/bootstrap.sh",
-    privileged: true
-
-  config.vm.provision "shell",
-    path: "provision/docker.sh",
-    privileged: true
+# Provisioning
+    app.vm.provision "shell", path: "provision/bootstrap.sh"
+    app.vm.provision "shell", path: "provision/docker.sh"
+    app.vm.provision "shell", path: "provision/user.sh"
+  end
