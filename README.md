@@ -5,8 +5,8 @@
 ## Требования
 
 На хост-машине должны быть установлены:
-- **VirtualBox**
-- **Vagrant**
+- **VirtualBox** https://www.virtualbox.org/wiki/Downloads
+- **Vagrant** https://developer.hashicorp.com/vagrant/install
 
 ## Описание окружения
 
