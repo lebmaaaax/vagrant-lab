@@ -1,50 +1,61 @@
 Vagrant.configure("2") do |config|
-  # -----------------------------
-  # Base box
-  # -----------------------------
+  # Базовый box
   config.vm.box = "ubuntu/jammy64"
-  config.vm.hostname = "vagrant-lab"
 
-  # -----------------------------
-  # Networking
-  # -----------------------------
+  # Общие настройки для всех VM
+  config.vm.provider "virtualbox" do |vb|
+    vb.cpus = 2
+    vb.memory = 2048
+  end
 
-  # Private network (host-only)
-  config.vm.network "private_network", ip: "192.168.56.10"
+  # =========================
+  # APP VM
+  # =========================
+  config.vm.define "app" do |app|
+    app.vm.hostname = "app"
 
-  # config.vm.network "forwarded_port", guest: 80, host: 8080
+    # Private network — доступ с хоста и между VM
+    app.vm.network "private_network", ip: "192.168.56.10"
 
-  # -----------------------------
-  # Provider settings
-  # -----------------------------
-
-  # VM - app
-
-  config.vm.provider "virtualbox" do |app|
-    vb.name = "app"
-    vb.memory = ENV.fetch("VM_MEMORY", 2048)
-    vb.cpus  = ENV.fetch("VM_CPUS", 2)
+    # Диск для приложения
+    # Требуется plugin: vagrant-disksize
     db.disksize.size = "20GB"
+
+    # Provisioning
+    app.vm.provision "shell", path: "scripts/common.sh"
+    app.vm.provision "shell", path: "scripts/app.sh"
+
+    # Ресурсы app меньше — логично
+    app.vm.provider "virtualbox" do |vb|
+      vb.name = "app"
+      vb.memory = 2048
+      vb.cpus = 2
+    end
   end
 
-# Provisioning
-    app.vm.provision "shell", path: "provision/bootstrap.sh"
-    app.vm.provision "shell", path: "provision/docker.sh"
-    app.vm.provision "shell", path: "provision/user.sh"
-  end
+  # =========================
+  # DB VM
+  # =========================
+  config.vm.define "db" do |db|
+    db.vm.hostname = "db"
 
-  # VM - db
+    # Private network — связь с app
+    db.vm.network "private_network", ip: "192.168.56.11"
 
-  config.vm.provider "virtualbox" do |db|
-    vb.name = "db"
-    vb.memory = ENV.fetch("VM_MEMORY", 2048)
-    vb.cpus  = ENV.fetch("VM_CPUS", 2)
+    # Увеличенный диск для БД
+    # Требуется plugin: vagrant-disksize
     db.disksize.size = "50GB"
-  end
 
-# Provisioning
-    app.vm.provision "shell", path: "provision/bootstrap.sh"
-    app.vm.provision "shell", path: "provision/docker.sh"
-    app.vm.provision "shell", path: "provision/user.sh"
+    # Provisioning
+    db.vm.provision "shell", path: "scripts/common.sh"
+    db.vm.provision "shell", path: "scripts/db.sh"
+
+    # Больше ресурсов под БД
+    db.vm.provider "virtualbox" do |vb|
+      vb.name = "db"
+      vb.memory = 2048
+      vb.cpus = 2
+    end
   end
+end
 
