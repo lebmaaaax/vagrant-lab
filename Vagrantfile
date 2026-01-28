@@ -17,10 +17,14 @@ Vagrant.configure("2") do |config|
   # -----------------------------
   # Provider settings
   # -----------------------------
-  config.vm.provider "virtualbox" do |vb|
-    vb.name = "vagrant-lab"
+
+  # VM - app
+
+  config.vm.provider "virtualbox" do |app|
+    vb.name = "app"
     vb.memory = ENV.fetch("VM_MEMORY", 2048)
     vb.cpus  = ENV.fetch("VM_CPUS", 2)
+    db.disksize.size = "20GB"
   end
 
 # Provisioning
@@ -28,3 +32,19 @@ Vagrant.configure("2") do |config|
     app.vm.provision "shell", path: "provision/docker.sh"
     app.vm.provision "shell", path: "provision/user.sh"
   end
+
+  # VM - db
+
+  config.vm.provider "virtualbox" do |db|
+    vb.name = "db"
+    vb.memory = ENV.fetch("VM_MEMORY", 2048)
+    vb.cpus  = ENV.fetch("VM_CPUS", 2)
+    db.disksize.size = "50GB"
+  end
+
+# Provisioning
+    app.vm.provision "shell", path: "provision/bootstrap.sh"
+    app.vm.provision "shell", path: "provision/docker.sh"
+    app.vm.provision "shell", path: "provision/user.sh"
+  end
+
