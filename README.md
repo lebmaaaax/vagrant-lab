@@ -7,6 +7,7 @@
 На хост-машине должны быть установлены:
 - **VirtualBox** https://www.virtualbox.org/wiki/Downloads
 - **Vagrant** https://developer.hashicorp.com/vagrant/install
+- vagrant plugin install vagrant-disksize
 
 ## Описание окружения
 
@@ -34,3 +35,18 @@
 │   ├── docker.sh
 │   ├── users.sh
 └── .gitignore
+```
+
+## Запуск
+
+vagrant up         # поднимет обе VM
+vagrant up app     # только app
+vagrant up db      # только db
+
+vagrant ssh app    # подключение к app
+vagrant ssh db     # только db
+
+vagrant status     # проверить статус VM
+vagrant halt       # остановить VM
+vagrant reload     # перезапустить VM
+vagrant destroy    # удалить VM
