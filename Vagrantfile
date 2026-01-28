@@ -22,7 +22,9 @@ Vagrant.configure("2") do |config|
     db.disksize.size = "20GB"
 
     # Provisioning
-    app.vm.provision "shell", path: "scripts/common.sh"
+    app.vm.provision "shell", path: "scripts/bootstrap.sh"
+    app.vm.provision "shell", path: "scripts/docker.sh"
+    app.vm.provision "shell", path: "scripts/user.sh"
     app.vm.provision "shell", path: "scripts/app.sh"
 
     # Ресурсы app меньше — логично
@@ -47,10 +49,10 @@ Vagrant.configure("2") do |config|
     db.disksize.size = "50GB"
 
     # Provisioning
-    db.vm.provision "shell", path: "scripts/common.sh"
+    db.vm.provision "shell", path: "scripts/bootstrap.sh"
+    db.vm.provision "shell", path: "scripts/user.sh"
     db.vm.provision "shell", path: "scripts/db.sh"
 
-    # Больше ресурсов под БД
     db.vm.provider "virtualbox" do |vb|
       vb.name = "db"
       vb.memory = 2048
