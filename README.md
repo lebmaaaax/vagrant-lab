@@ -40,14 +40,14 @@
 
 ## Запуск
 
-vagrant up         # поднимет обе VM
-vagrant up app     # только app
-vagrant up db      # только db
+- vagrant up         # поднимет обе VM
+- vagrant up app     # только app
+- vagrant up db      # только db
 
-vagrant ssh app    # подключение к app
-vagrant ssh db     # только db
+- vagrant ssh app    # подключение к app
+- vagrant ssh db     # только db
 
-vagrant status     # проверить статус VM
-vagrant halt       # остановить VM
-vagrant reload     # перезапустить VM
-vagrant destroy    # удалить VM
+- vagrant status     # проверить статус VM
+- vagrant halt       # остановить VM
+- vagrant reload     # перезапустить VM
+- vagrant destroy    # удалить VM
